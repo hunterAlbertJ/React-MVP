@@ -22,14 +22,14 @@ app.post("/", async (req, res) => {
 app.get("/:index?", async (req, res) => {
   try {
     if (req.params.index !== undefined) {
-      singleEvent = await pool.query("SELECT * FROM events WHERE event_id = $1", [
+      singleEvent = await pool.query("SELECT *, to_char(event_date, 'yyyy-MM-dd') as event_date FROM events WHERE event_id = $1", [
         req.params.index
       ]);
       console.log(req.params.index)
       console.log(singleEvent.rows)
       res.json(singleEvent.rows);
     } else {
-      let allEvents = await pool.query("SELECT * FROM events");
+      let allEvents = await pool.query("SELECT *, to_char(event_date, 'yyyy-MM-dd') as event_date FROM events");
       res.json(allEvents.rows);
     }
   } catch (err) {
